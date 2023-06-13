@@ -1,6 +1,7 @@
 package scan;
 
 import hello.core.AutoAppConfig;
+import hello.core.common.MyLogger;
 import hello.core.member.MemberRepository;
 import hello.core.member.MemberService;
 import hello.core.order.OrderServiceImpl;
@@ -25,5 +26,10 @@ public class AutoAppConfigTest {
         OrderServiceImpl bean = ac.getBean(OrderServiceImpl.class);
         MemberRepository memberRepository= bean.getMemberRepository();
         System.out.println("memberRepository = " + memberRepository);
+
+//        MyLogger myLogger = ac.getBean("myLogger", MyLogger.class);
+//        Assertions.assertThat(myLogger).isInstanceOf(MyLogger.class);
+//        System.out.println("myLogger = " + myLogger);
+
     }
 }

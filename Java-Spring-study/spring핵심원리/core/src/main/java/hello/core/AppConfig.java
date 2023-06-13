@@ -1,5 +1,6 @@
 package hello.core;
 
+import hello.core.common.MyLogger;
 import hello.core.discount.DiscountPolicy;
 import hello.core.discount.FixDiscountPolicy;
 import hello.core.discount.RateDiscountPolicy;
