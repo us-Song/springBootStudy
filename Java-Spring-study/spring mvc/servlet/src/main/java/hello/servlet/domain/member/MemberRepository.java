@@ -19,7 +19,7 @@ public class MemberRepository {
     public static MemberRepository getInstance() {
         return instance;
     }
-    private MemberRepository() {
+    public MemberRepository() {
 
     }
 
