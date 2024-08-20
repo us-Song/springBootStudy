@@ -11,6 +11,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.ValidationUtils;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -23,9 +25,19 @@ import java.util.Map;
 @RequestMapping("/validation/v2/items")
 @RequiredArgsConstructor
 public class ValidationItemControllerV2 {
-
+    //RequiredArgsConstructor는 생성자 1개면 생성자 생략가능 , @autowired 처리 해주기 때문에 하단 2개 변수 사용가능
     private final ItemRepository itemRepository;
+    private final ItemValidator itemValidator;
 
+    @InitBinder
+    public void init(WebDataBinder dataBinder) {
+        //WebDataBinder = 웹 요청 파라미터를 자바 객체에 바인딩
+        //기존에는 itemValidator.validate(item, bindingResult); 이렇게 써야함
+        //하지만 웹 요청 파라미터인 (item, bindingResult)를  스프링이 itemValidator 객체에 바인딩 해주기 때문에 생량 가능한 것
+        //컨트롤러가 호출될 때 마다 WebDataBinder가 만들어지고 여기에다가 항상 itemValidator를 넣음
+        //해당 컨트롤러 범위에서만 적용
+        dataBinder.addValidators(itemValidator);
+    }
     @GetMapping
     public String items(Model model) {
         List<Item> items = itemRepository.findAll();
@@ -161,7 +173,7 @@ public class ValidationItemControllerV2 {
         return "redirect:/validation/v2/items/{itemId}";
     }
 
-    @PostMapping("/add")
+    //@PostMapping("/add")
     public String addItemV4(@ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
         //타입 에러시에는 스프링에서 BindingResult에 미리 값을 넣은 후 컨트롤러를 호출하기 때문에 이미 값이 들어 있어서 출력가능하다.
         log.info("error value= {}",bindingResult.getFieldError("price"));
@@ -195,6 +207,40 @@ public class ValidationItemControllerV2 {
                 bindingResult.reject("totalPriceMin", new Object[]{10000, resultPrice}, null);
             }
         }
+
+        //검증에 실패하면 다시 입력 폼으로
+        if(bindingResult.hasErrors()) {
+            log.info("errors={}", bindingResult);
+            return "validation/v2/addForm";
+        }
+
+        //성공 로직
+        Item savedItem = itemRepository.save(item);
+        redirectAttributes.addAttribute("itemId", savedItem.getId());
+        redirectAttributes.addAttribute("status", true);
+        return "redirect:/validation/v2/items/{itemId}";
+    }
+
+    //@PostMapping("/add")
+    public String addItemV5(@ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+
+        itemValidator.validate(item, bindingResult);
+
+        //검증에 실패하면 다시 입력 폼으로
+        if(bindingResult.hasErrors()) {
+            log.info("errors={}", bindingResult);
+            return "validation/v2/addForm";
+        }
+
+        //성공 로직
+        Item savedItem = itemRepository.save(item);
+        redirectAttributes.addAttribute("itemId", savedItem.getId());
+        redirectAttributes.addAttribute("status", true);
+        return "redirect:/validation/v2/items/{itemId}";
+    }
+
+    @PostMapping("/add")
+    public String addItemV6(@Validated @ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
 
         //검증에 실패하면 다시 입력 폼으로
         if(bindingResult.hasErrors()) {
