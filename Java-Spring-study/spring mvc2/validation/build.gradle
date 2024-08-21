@@ -21,6 +21,9 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	//jdk 8~14 까지는 javascript를 지원하는 nashorn 엔진을 지원했지만 이후로는 사용 불가능 해서 해당 의존성을 추가 안하면 @ScriptAssert 사용불가
+	implementation 'org.openjdk.nashorn:nashorn-core:15.3'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
