@@ -14,7 +14,7 @@ import java.util.Map;
 
 @Slf4j
 public class UserHandlerExceptionResolver implements HandlerExceptionResolver {
-
+    //이 예시는 서블릿에서 에러페이지 찾을 필요도 없이 바로 결과를 제이슨으로 깔끔하게 리턴해서 더 간단
     private final ObjectMapper objectMapper = new ObjectMapper();
     @Override
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
