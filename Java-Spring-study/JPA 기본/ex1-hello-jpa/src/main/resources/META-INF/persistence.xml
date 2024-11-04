@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+    <persistence-unit name="hello">
+        <properties>
+            <!-- 필수 속성 -->
+            <property name="jakarta.persistence.jdbc.driver" value="org.h2.Driver"/>
+            <property name="jakarta.persistence.jdbc.user" value="sa"/>
+            <property name="jakarta.persistence.jdbc.password" value=""/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:h2:tcp://localhost/~/test"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+
+            <!-- 옵션 -->
+            <property name="hibernate.show_sql" value="true"/> <!-- 쿼리 표시-->
+            <property name="hibernate.format_sql" value="true"/> <!-- 쿼리 이쁘게 표시-->
+            <property name="hibernate.use_sql_comments"  value="true"/> <!-- 쿼리에 대한 설명-->
+            <!-- auto 속성은 스키마를 자동으로 생성,갱신,검증, 삭제 하는 방식 제어 / 어플리케이션 재시작할 때마다 데이터베이스 새로생성해서 기존 데이터가 사라짐, 안쓰는게 좋음-->
+<!--            <property name="hibernate.hbm2ddl.auto" value="create" /> -->
+        </properties>
+    </persistence-unit>
+
+</persistence>
