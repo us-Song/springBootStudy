@@ -36,7 +36,7 @@ public class JpaMain {
             Team findTeam = findMember.getTeam();
             System.out.println("findTeam.getName() = " + findTeam.getName());
 
-            findMember.setTeam(team2); //멤버가 가입한 팀 변경 -> member의 외래키인 team_id 수정
+            findMember.setTeam(team2); //멤버가 가입한 팀 변경 -> member의 외래키인 team_id  수정
 
             tx.commit();
         } catch (Exception e) {
