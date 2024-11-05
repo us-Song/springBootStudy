@@ -15,29 +15,29 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Member member1 = new Member();
-            member1.setUsername("A");
-            Member member2 = new Member();
-            member2.setUsername("B");
-            Member member3 = new Member();
-            member3.setUsername("C");
-            Member member4 = new Member();
-            member4.setUsername("D");
-            Member member5 = new Member();
-            member5.setUsername("E");
-            System.out.println(" =============== ");
-            em.persist(member1); //디비에서 시퀀스 가져옴
-            em.persist(member2); //mem에서 시퀀스 가져옴
-            em.persist(member3); // mem에서 시퀀스 가져옴
-            em.persist(member4); // mem에서 시퀀스 가져옴
-            em.persist(member5); // mem에서 시퀀스 가져옴
 
-            System.out.println("member.getId() = " + member1.getId());
-            System.out.println("member.getId() = " + member2.getId());
-            System.out.println("member.getId() = " + member3.getId());
-            // select 쿼리가 필요없는 이유는 , jdbc내부적으로 insert쿼리 실행시 리턴으로 값을 받음, 이 값을 jpa가 내부적으로 들고옴
-            System.out.println(" =============== ");
-            
+            //저장
+            Team team = new Team();
+            team.setName("TeamA");
+            em.persist(team);
+            Team team2 = new Team();
+            team2.setName("TeamB");
+            em.persist(team2);
+
+            Member member = new Member();
+            member.setUsername("member1");
+            member.setTeam(team);
+            em.persist(member);
+
+            em.flush();
+            em.clear();
+
+            Member findMember = em.find(Member.class, member.getId()); // 영속성 컨텍스트에서 가져와서 쿼리 안날림, 멤버와 팀을 한번에 땡겨옴
+            Team findTeam = findMember.getTeam();
+            System.out.println("findTeam.getName() = " + findTeam.getName());
+
+            findMember.setTeam(team2); //멤버가 가입한 팀 변경 -> member의 외래키인 team_id 수정
+
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
