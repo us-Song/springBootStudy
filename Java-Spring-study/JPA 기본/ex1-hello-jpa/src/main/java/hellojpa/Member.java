@@ -39,10 +39,25 @@ public class Member {
         return team;
     }
 
+    public void changeTeam(Team team) {
+        //getter setter를 쓰면 , 관례상 쓰는 것처럼 보여 안중요한 로직 처럼 보여지기 때문에 메서드 명을 바꿔준다.
+        this.team = team;
+        team.getMembers().add(this);// 멤버 팀 양쪽에 주인의 값을 세팅하기 위해 코드 추가
+    }
+
+    public Member() {
+    }
+
     public void setTeam(Team team) {
         this.team = team;
     }
 
-    public Member() {
+    @Override
+    public String toString() {
+        return "Member{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", team=" + team +
+                '}';
     }
 }

@@ -19,24 +19,27 @@ public class JpaMain {
             //저장
             Team team = new Team();
             team.setName("TeamA");
+//            team.getMembers().add(member);
             em.persist(team);
-            Team team2 = new Team();
-            team2.setName("TeamB");
-            em.persist(team2);
+
 
             Member member = new Member();
             member.setUsername("member1");
-            member.setTeam(team);
+            member.changeTeam(team); //주인에 값넣기
             em.persist(member);
 
-            em.flush();
-            em.clear();
+//            team.addMember(member); 연관관계 편의 메서드는 한쪽에만 만들고 사용, 둘중에 한군데서만 주인에 값넣기 , 어디에 만들지는 상황마다 다름
+//            em.flush();
+//            em.clear();
 
-            Member findMember = em.find(Member.class, member.getId()); // 영속성 컨텍스트에서 가져와서 쿼리 안날림, 멤버와 팀을 한번에 땡겨옴
-            Team findTeam = findMember.getTeam();
-            System.out.println("findTeam.getName() = " + findTeam.getName());
+            Team findTeam = em.find(Team.class, team.getId()); //1차 캐시
+            List<Member> members = findTeam.getMembers();
 
-            findMember.setTeam(team2); //멤버가 가입한 팀 변경 -> member의 외래키인 team_id  수정
+            System.out.println(" =========================== ");
+            for (Member m : members) {
+                System.out.println("m = " + m.getUsername());
+            }
+            System.out.println(" =========================== ");
 
             tx.commit();
         } catch (Exception e) {

@@ -3,20 +3,33 @@ package jpabook.jpashop.domain;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "ORDERS") //order by 때문에 안되는 db도 있어서 이거로 많이 씀
 public class Order {
-
     @Id @GeneratedValue
     @Column(name= "ORDER_ID")
     private Long id;
-    @Column(name= "MEMBER_ID")
-    private Long memberId;
+    @ManyToOne
+    @JoinColumn(name= "MEMBER_ID")
+    private Member member;
+
+    @OneToMany(mappedBy = "order") //오더아이템의 외래키인 order_id =order
+    private List<OrderItem> orderItems = new ArrayList<>();
     private LocalDateTime orderDate;
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
+    /**
+     * 연관관계편의메서드
+     * @param orderItem
+     */
+    public void addOrderItem(OrderItem orderItem) {
+        orderItems.add(orderItem);
+        orderItem.setOrder(this);
+    }
     public Long getId() {
         return id;
     }
@@ -25,12 +38,12 @@ public class Order {
         this.id = id;
     }
 
-    public Long getMemberId() {
-        return memberId;
+    public Member getMember() {
+        return member;
     }
 
-    public void setMemberId(Long memberId) {
-        this.memberId = memberId;
+    public void setMember(Member member) {
+        this.member = member;
     }
 
     public LocalDateTime getOrderDate() {
