@@ -11,18 +11,11 @@ public class Team {
     @Column(name= "TEAM_ID")
     private Long id;
     private String name;
-    @OneToMany(mappedBy = "team") // 나의 반대편 연결 상대에 이거와 매핑되어있다
-    private List<Member> members= new ArrayList<>();
+    @OneToMany//원래 다대일일 경우 mappedby= "team" 이지만, 일대다에서는 team이 주인인까 안함
+    @JoinColumn(name= "TEAM_ID") //일대다, 주인이지만 외래키는 member테이블에 있으므로 joincolumn을 꼭 해줘야함, 그래야 jpa가 관리해줌
+    private List<Member> members = new ArrayList<>();
     public Long getId() {
         return id;
-    }
-
-    public List<Member> getMembers() {
-        return members;
-    }
-
-    public void setMembers(List<Member> members) {
-        this.members = members;
     }
 
     public void setId(Long id) {
@@ -37,17 +30,11 @@ public class Team {
         this.name = name;
     }
 
-//    public void addMember(Member member) {
-//        member.setTeam(this);
-//        members.add(member);
-//    }
+    public List<Member> getMembers() {
+        return members;
+    }
 
-    @Override
-    public String toString() {
-        return "Team{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", members=" + members +
-                '}';
+    public void setMembers(List<Member> members) {
+        this.members = members;
     }
 }
