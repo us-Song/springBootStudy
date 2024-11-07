@@ -10,6 +10,6 @@ public class Locker {
     @Id @GeneratedValue
     private Long id;
     private String name;
-    @OneToOne(mappedBy = "locker") //주인 외래키에 매핑
-    Member member;
+//    @OneToOne(mappedBy = "locker") //주인 외래키에 매핑
+//    Member member;
 }
