@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Member {
+public class Member extends BaseEntity{
     //@Column(length=10) 같은 제약도 되도록 추가해주면 좋다 , 가급적 제약조건 다 넣는게 좋다, 테이블 보고 왔다갔다하는거 방지
     //컬럼명 소문자 대문자는 회사 마다 규칙 다름, 보통 itemId면 ITEM_ID 이런식으로 언더바 넣는게 관례, 부트는 _ 관례를 적용해줌
     //개인 스타일임

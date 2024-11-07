@@ -2,6 +2,7 @@ package hellojpa;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class JpaMain {
@@ -16,14 +17,15 @@ public class JpaMain {
 
         try {
             //저장
-            Member member = saveMember(em);
+            Member member= new Member();
+            member.setUsername("song1");
+            member.setCreatedBy("song");
+            member.setCreatedDate(LocalDateTime.now());
 
-            Team team = new Team();
-            team.setName("TeamA");
-            //옆 테이블 업데이트
-            team.getMembers().add(member);
+            em.persist(member);
 
-            em.persist(team);
+            em.flush();
+            em.clear();
 
             tx.commit();
         } catch (Exception e) {
@@ -34,11 +36,4 @@ public class JpaMain {
         emf.close();
     }
 
-    private static Member saveMember(EntityManager em) {
-        Member member= new Member();
-        member.setUsername("member1");
-
-        em.persist(member);
-        return member;
-    }
 }

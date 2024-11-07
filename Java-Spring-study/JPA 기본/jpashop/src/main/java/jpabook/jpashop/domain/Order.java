@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "ORDERS") //order by 때문에 안되는 db도 있어서 이거로 많이 씀
-public class Order {
+public class Order extends BaseEntity{
     @Id @GeneratedValue
     @Column(name= "ORDER_ID")
     private Long id;

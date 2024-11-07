@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-public class Member {
+public class Member extends BaseEntity{
     @Id @GeneratedValue
     @Column(name= "MEMBER_ID")
     private Long id;
@@ -25,6 +25,7 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private List<MemberProduct> memberProducts = new ArrayList<>();
+
     public Long getId() {
         return id;
     }
