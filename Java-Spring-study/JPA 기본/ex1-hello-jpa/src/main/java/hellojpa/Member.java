@@ -18,6 +18,10 @@ public class Member extends BaseEntity{
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn
     private Team team;
+    @Embedded
+    private Period workPeriod;
+    @Embedded
+    private Address homeAddress;
 
     public Long getId() {
         return id;
@@ -43,6 +47,19 @@ public class Member extends BaseEntity{
         this.team = team;
     }
 
-    public Member() {
+    public Period getWorkPeriod() {
+        return workPeriod;
+    }
+
+    public void setWorkPeriod(Period workPeriod) {
+        this.workPeriod = workPeriod;
+    }
+
+    public Address getHomeAddress() {
+        return homeAddress;
+    }
+
+    public void setHomeAddress(Address homeAddress) {
+        this.homeAddress = homeAddress;
     }
 }
