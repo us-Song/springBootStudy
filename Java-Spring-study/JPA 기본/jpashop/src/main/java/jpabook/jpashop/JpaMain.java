@@ -18,20 +18,21 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Movie movie = new Movie();
-            movie.setActor("song");
-            movie.setDirector("ss");
-            movie.setName("청설");
-            movie.setPrice(14000);
-            movie.setStockQuantity(1);
-
-            em.persist(movie);
+            OrderItem orderItem1 = new OrderItem();
+            OrderItem orderItem2 = new OrderItem();
+            Order order = new Order();
+//            order.getOrderItems().add(orderItem1); // 주인 세팅을 안함.
+//            order.getOrderItems().add(orderItem2); // 주인인 orderItem은 부모가 누군지 모름 -> 부모인 order가 orderitem 관리 불가
+            order.addOrderItem(orderItem1); // 편의 메서드를 통해 주인까지 세팅
+            order.addOrderItem(orderItem2); //따라서 주인인 oderitem은 부모인 order의 정보를 들고 있게됨 -> 부모인 order가 orderitem 관리
+            em.persist(order);
 
             em.flush();
             em.clear();
+
+            Order findOrder = em.find(Order.class, order.getId());
+            em.remove(findOrder);
             System.out.println("============= ");
-            Movie findMovie = em.find(Movie.class, movie.getId());
-            System.out.println("findMovie = " + findMovie.getName());
 
             tx.commit();
         } catch (Exception e) {

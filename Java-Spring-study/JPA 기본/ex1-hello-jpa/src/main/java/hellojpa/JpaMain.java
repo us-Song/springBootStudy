@@ -3,6 +3,8 @@ package hellojpa;
 import jakarta.persistence.*;
 import org.hibernate.Hibernate;
 
+import java.util.List;
+
 public class JpaMain {
 
     public static void main(String[] args) {
@@ -14,23 +16,29 @@ public class JpaMain {
         tx.begin();
 
         try {
+            Child child1 = new Child();
+            Child child2 = new Child();
 
-            Member member1 = new Member();
-            member1.setUsername("hello");
-            em.persist(member1);
+            Parent parent = new Parent();
+            parent.addChild(child1);
+            parent.addChild(child2);
+
+            em.persist(parent);
 
             em.flush();
             em.clear();
 
-            Member refMember = em.getReference(Member.class, member1.getId());//프록시 객체 생성, member의 id는 파라미터로 넘어갔으니까 프록시 객체가 알 수 있음
-//            Member refMember = em.find(Member.class, member1.getId());//진짜 객체 생성, 여기선 member 전부를 들고옴
+            Parent findParent = em.find(Parent.class, parent.getId());
+//            findParent.getChildList().remove(0);
+            em.remove(findParent);
+//            Member refMember = em.getReference(Member.class, member1.getId());//프록시 객체 생성, member의 id는 파라미터로 넘어갔으니까 프록시 객체가 알 수 있음
+//            Member m = em.find(Member.class, member1.getId());//진짜 객체 생성, 여기선 member 전부를 들고옴
+
             System.out.println(" =======");
-            refMember.getUsername(); // 프록시 객체는 파라미터로 넘어온 id만 알고 나머지 실제 객체에 대한 정보를 모름 (target에 값이 없음)
+            System.out.println(" =======");
+//            m.getUsername(); // 프록시 객체는 파라미터로 넘어온 id만 알고 나머지 실제 객체에 대한 정보를 모름 (target에 값이 없음)
             // -> 영속성 컨텍스트에 실제 객체 초기화 요청 -> DB select 쿼리 발생 -> 실제 객체 생성 후 프록시의 타겟과 연결 시켜줌 -> 프록시 객체로 실제 객체 참조 가능
             System.out.println(" =======");
-//            Hibernate.initialize(refMember); // 강제 초기화 메서드
-            System.out.println("reference.getClass() = " + refMember.getClass()); //같은 트랜잭션 내에서 영속선 컨텍스트는 동일
-            System.out.println("PersistenceUnitUtil.isLoaded(refMember) = " + emf.getPersistenceUnitUtil().isLoaded(refMember));
 
             //프록시의 특징 중 4번째 특징에 대한 부연 설명
             //System.out.println("a == a :  " + (m1 == reference)); // 한 트랜잭션 안에서 같은 영속성 컨텍스트에서 값을 꺼냈으면 JPA는 항상 == 을 보장
