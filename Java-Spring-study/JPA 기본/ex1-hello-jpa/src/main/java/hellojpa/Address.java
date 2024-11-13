@@ -45,4 +45,16 @@ public class Address {
     public int hashCode() {
         return Objects.hash(city, street, zipCode);
     }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
 }
