@@ -1,6 +1,9 @@
 package hellojpa;
 
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import org.hibernate.Hibernate;
 
 import java.time.LocalDateTime;
@@ -18,25 +21,8 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Address address = new Address("homeCity", "street", "1000");
-
-            Member member = new Member();
-            member.setUsername("member1");
-            member.setHomeAddress(address);
-
-            member.getFavoriteFoods().add("치킨");
-            member.getFavoriteFoods().add("족발");
-            member.getFavoriteFoods().add("피자");
-
-            member.getAddressHistory().add(new AddressEntity("old1", "street", "10000"));
-            member.getAddressHistory().add(new AddressEntity("old2", "street", "10000"));
-
-            em.persist(member);
-
-            em.flush();
-            em.clear();
-
-            Member findMember = em.find(Member.class, member.getId());
+            em.createNativeQuery("select MEMBER_ID, city, street, zipcode, USERNAME from MEMBER").getResultList();
+            tx.commit();
 
 //            findMember.getHomeAddress().setCity("newCity");
 //            Address a = findMember.getHomeAddress();
@@ -49,7 +35,6 @@ public class JpaMain {
 //            findMember.getAddressHistory().remove(new AddressEntity("old1", "street", "10000"));
 //            findMember.getAddressHistory().add(new AddressEntity("newCity1", "street", "10000"));
 
-            tx.commit();
 
             //프록시는 중요한 부분이라 주석남김!
             //            Member refMember = em.getReference(Member.class, member1.getId());//프록시 객체 생성, member의 id는 파라미터로 넘어갔으니까 프록시 객체가 알 수 있음
