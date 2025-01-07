@@ -18,7 +18,7 @@
             <property name="hibernate.use_sql_comments"  value="true"/> <!-- 쿼리에 대한 설명-->
             <!-- auto 속성은 스키마를 자동으로 생성,갱신,검증, 삭제 하는 방식 제어 / 어플리케이션 재시작할 때마다 데이터베이스 새로생성해서 기존 데이터가 사라짐, 안쓰는게 좋음-->
             <property name="hibernate.hbm2ddl.auto" value="create" />
-            <property name="hibernate.default_batch_fetch_size" value="100" /> <!-- 배치 사이즈 옵션 글로벌 세팅, 지연로딩 세팅 시 N+1 문제를 방지할 수 있는 옵션 -->
+<!--            <property name="hibernate.default_batch_fetch_size" value="100" /> 배치 사이즈 옵션 글로벌 세팅, 지연로딩 세팅 시 N+1 문제를 방지할 수 있는 옵션, 실무에선 글로벌로 깔고 기본으로 씀-->
         </properties>
     </persistence-unit>
 

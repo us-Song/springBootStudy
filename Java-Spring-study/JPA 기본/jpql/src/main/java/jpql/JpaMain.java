@@ -26,7 +26,7 @@ public class JpaMain {
 
             Member member = new Member();
             member.setUserName("회원1");
-            member.setAge(20);
+            member.setAge(19);
             member.setTeam(teamA);
             member.setType(MemberType.ADMIN);
             em.persist(member);
@@ -41,8 +41,17 @@ public class JpaMain {
             member3.setTeam(teamB);
             em.persist(member3);
 
-            em.flush();
+//            em.flush();
+//            em.clear();
+            //벌크 연산 수행시 flush 자동 호출
+            int resultCount = em.createQuery("update Member m set m.age = 20")
+                    .executeUpdate();
+            System.out.println("resultCount = " + resultCount);
+
             em.clear();
+
+            Member member1 = em.find(Member.class, member.getId());
+            System.out.println("member.getAge() = " + member1.getAge());
 
             //String query = "select function('group_concat', m.username) from Member m";
 //            String query = "select group_concat(m.username) from Member m"; //이렇게 쓰는게 직관적.
@@ -55,15 +64,17 @@ public class JpaMain {
 
 //            String query = "select m from Member m";
 //            String query = "select m from Member m join fetch m.team"; 페치조인
-            String query = "select t from Team t";
+//            String query = "select t from Team t";
+//            String query = "select m from Member m where m.team = :team";
 //            String query = "select t from Team t join fetch t.members";
 //            Collection result = em.createQuery(query, Collection.class)
 //                            .getResultList();
 //            System.out.println("result = " + result);
-            List<Team> resultList = em.createQuery(query, Team.class)
-                    .setFirstResult(0)
-                    .setMaxResults(2)
-                    .getResultList();
+//            Member findMember = em.createQuery(query, Member.class)
+//                    .setParameter("team", teamB)
+//                    .getSingleResult();
+//
+//            System.out.println("findMember = " + findMember);
 //            for (Member member1 : resultList) {
 //                System.out.println("member = " + member1.getUserName() + "," + member1.getTeam().getName());
 //                //회원1: TeamA, 지연로딩이므로 쿼리날라감
@@ -72,12 +83,12 @@ public class JpaMain {
 //                //-->페치쿼리 안쓰면 쿼리 총 3번 날라감 -> N+1문제 -> 페치조인으로 해결해야함
 //            }
 
-            for (Team team1 : resultList) {
-                System.out.println("team = " + team1.getName() + "," + team1.getMembers().size());
-                for(Member member1 : team1.getMembers()) {
-                    System.out.println("member1.getUserName() = " + member1.getUserName());
-                }
-            }
+//            for (Team team1 : resultList) {
+//                System.out.println("team = " + team1.getName() + "," + team1.getMembers().size());
+//                for(Member member1 : team1.getMembers()) {
+//                    System.out.println("member1.getUserName() = " + member1.getUserName());
+//                }
+//            }
             tx.commit();
             //            String query = "select mm.mAge from (select m.age as mAge from Member m) as mm";
 //            -> 프롬절 서브쿼리 쓸 때 컬럼에도 별칭 붙여줘야함
